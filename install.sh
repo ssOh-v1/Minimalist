@@ -141,10 +141,25 @@ fi
 # 11. Установка обоев
 echo -e "${YELLOW}=== Установка обоев ===${NC}"
 sudo mkdir -p /usr/share/sddm/themes/ii-sddm-theme/Backgrounds
-if [ -d wallpapers ] && [ -n "$(ls -A wallpapers 2>/dev/null)" ]; then
-    sudo cp -n wallpapers/* /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/
+# 7.6 Выбор обоев (опционально)
+echo -e "${YELLOW}=== Хочешь ли ты скачать обои? ===${NC}"
+WALLPAPERS_CHOICE=$(printf "🎨 Да, скачать обои (670 шт.)\\n🚫 Нет, без обоев" | fzf --height=30% --reverse)
+
+if [[ "$WALLPAPERS_CHOICE" == *"Да"* ]]; then
+    echo -e "${YELLOW}Скачиваем обои из Minimalist-Wallpapers...${NC}"
+    cd /tmp
+    git clone --depth 1 https://github.com/ssOh-v1/Minimalist-Wallpapers.git minimal-wallpapers 2>/dev/null
+    if [ -d /tmp/minimal-wallpapers ]; then
+        sudo mkdir -p /usr/share/sddm/themes/ii-sddm-theme/Backgrounds
+        sudo cp /tmp/minimal-wallpapers/*.png /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
+        sudo cp /tmp/minimal-wallpapers/*.jpg /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
+        rm -rf /tmp/minimal-wallpapers
+        echo -e "${GREEN}Обои установлены!${NC}"
+    else
+        echo -e "${RED}Не удалось скачать обои. Пропускаем.${NC}"
+    fi
 else
-    echo -e "${YELLOW}Папка wallpapers пуста — обои для смены (SUPER+W) можно добавить позже.${NC}"
+    echo -e "${YELLOW}Обои не скачаны — можно добавить позже вручную.${NC}"
 fi
 
 # 12. Настройка sudoers
