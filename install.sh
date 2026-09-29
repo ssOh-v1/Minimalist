@@ -1,0 +1,171 @@
+#!/bin/bash
+
+# Minimalist — установка окружения
+# Автор: ssOh-v1
+
+set -euo pipefail
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo -e "${GREEN}=== Minimalist: установка ===${NC}"
+
+# 1. Проверка, что мы на Arch
+if ! command -v pacman &>/dev/null; then
+    echo -e "${RED}Ошибка: этот скрипт только для Arch Linux и производных.${NC}"
+    exit 1
+fi
+
+# 2. Проверка интернета
+if ! ping -c 1 -W 3 archlinux.org &>/dev/null; then
+    echo -e "${RED}Ошибка: нет интернета. Проверь соединение.${NC}"
+    exit 1
+fi
+
+if [ ! -d "configs" ]; then
+    echo -e "${RED}Ошибка: запустите скрипт из папки Minimalist.${NC}"
+    exit 1
+fi
+
+# 3. Бэкап старых конфигов (ДО копирования новых)
+echo -e "${YELLOW}=== Резервное копирование старых конфигов ===${NC}"
+if [ -d ~/.config ]; then
+    BACKUP_DIR="$HOME/.config_backup_$(date +%Y%m%d-%H%M%S)"
+    mkdir -p "$BACKUP_DIR"
+    cp -r ~/.config/* "$BACKUP_DIR/" 2>/dev/null || true
+    echo -e "${GREEN}Старые конфиги сохранены в $BACKUP_DIR${NC}"
+fi
+
+# 4. Обновление зеркал
+echo -e "${YELLOW}=== Обновление зеркал ===${NC}"
+if command -v reflector &>/dev/null; then
+    sudo reflector --country Russia --latest 20 --sort rate --save /etc/pacman.d/mirrorlist 2>/dev/null || true
+fi
+
+# 5. Установка базовых пакетов
+echo -e "${YELLOW}=== Установка базовых пакетов ===${NC}"
+sudo pacman -S --needed --noconfirm \
+    batsignal hyprpicker pamixer brightnessctl jq nemo fzf \
+    hyprland hyprpaper hyprlock hypridle hyprpolkitagent \
+    xdg-desktop-portal-hyprland \
+    waybar rofi kitty swaync cliphist fastfetch \
+    sddm qt6-5compat qt6-shadertools qt6-declarative \
+    pipewire pipewire-pulse pipewire-alsa wireplumber \
+    pavucontrol network-manager-applet blueman bluez bluez-utils \
+    ttf-fredoka noto-fonts noto-fonts-emoji \
+    fuzzel wl-clipboard grim slurp \
+    weston \
+    base-devel git wget curl reflector
+
+# 6. Установка yay
+if ! command -v yay &>/dev/null; then
+    echo -e "${YELLOW}=== Установка yay ===${NC}"
+    cd /tmp
+    git clone https://aur.archlinux.org/yay.git 2>/dev/null || {
+        echo -e "${RED}Ошибка: не удалось склонировать yay.${NC}"
+        exit 1
+    }
+    cd yay
+    makepkg -si --noconfirm
+    cd ~
+    rm -rf /tmp/yay
+fi
+
+# 7. Установка AUR-пакетов
+echo -e "${YELLOW}=== Установка AUR-пакетов ===${NC}"
+yay -S --needed --noconfirm wallust matugen bibata-cursor-theme-bin python-spotipy 2>/dev/null || {
+    echo -e "${YELLOW}Предупреждение: не все AUR-пакеты установились.${NC}"
+}
+
+# 7.5 Выбор версии окружения (fzf с превью отличий)
+echo -e "${YELLOW}=== Выбор версии окружения ===${NC}"
+VERSION_CHOICE=$(printf "🟢 Полная версия\n🟡 Облегчённая версия" | fzf --height=40% --reverse \
+    --preview "bash configs/hypr/scripts/version-preview.sh {}" \
+    --preview-window=right:60%)
+if [[ "$VERSION_CHOICE" == *"Облегчённая"* ]]; then
+    cp configs/hypr/hyprland-lite.conf configs/hypr/hyprland.conf.selected
+else
+    cp configs/hypr/hyprland.conf configs/hypr/hyprland.conf.selected
+fi
+
+# 8. Копирование конфигов
+echo -e "${YELLOW}=== Копирование конфигов ===${NC}"
+mkdir -p ~/.config
+for dir in hypr waybar rofi kitty swaync fastfetch; do
+    if [ -d "configs/$dir" ]; then
+        cp -r "configs/$dir" ~/.config/
+    fi
+done
+
+# Применяем выбранную версию hyprland.conf
+if [ -f configs/hypr/hyprland.conf.selected ]; then
+    cp configs/hypr/hyprland.conf.selected ~/.config/hypr/hyprland.conf
+    rm -f configs/hypr/hyprland.conf.selected
+fi
+
+# 8.5 Установка темы SDDM
+echo -e "${YELLOW}=== Установка темы SDDM (ii-sddm-theme) ===${NC}"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/3d3f/ii-sddm-theme/main/setup.sh)"
+
+# 9. Копирование конфигов SDDM
+echo -e "${YELLOW}=== Настройка SDDM ===${NC}"
+sudo mkdir -p /etc/sddm.conf.d
+
+# Копируем конфиги SDDM (не темы)
+if [ -f configs/sddm/10-wayland.conf ]; then
+    sudo cp configs/sddm/10-wayland.conf /etc/sddm.conf.d/ 2>/dev/null || true
+fi
+if [ -f configs/sddm/ii-sddm-theme.conf ]; then
+    sudo cp configs/sddm/ii-sddm-theme.conf /etc/sddm.conf.d/ 2>/dev/null || true
+fi
+if [ -f configs/sddm/sddm.conf ]; then
+    sudo cp configs/sddm/sddm.conf /etc/sddm.conf.d/ 2>/dev/null || true
+fi
+
+# Копируем конфиг темы ii-sddm-theme (если тема установлена)
+if [ -d /usr/share/sddm/themes/ii-sddm-theme/Themes ]; then
+    sudo cp configs/sddm/ii-sddm.conf /usr/share/sddm/themes/ii-sddm-theme/Themes/ 2>/dev/null || true
+fi
+
+# 10. Копирование скриптов
+echo -e "${YELLOW}=== Копирование скриптов ===${NC}"
+mkdir -p ~/.local/bin
+mkdir -p ~/.config/hypr/scripts
+if [ -f scripts/restore-wallpaper.sh ] && [ -f scripts/change-wallpaper.sh ]; then
+    cp scripts/restore-wallpaper.sh scripts/change-wallpaper.sh ~/.local/bin/
+    chmod +x ~/.local/bin/restore-wallpaper.sh ~/.local/bin/change-wallpaper.sh
+fi
+
+# 11. Установка обоев
+echo -e "${YELLOW}=== Установка обоев ===${NC}"
+sudo mkdir -p /usr/share/sddm/themes/ii-sddm-theme/Backgrounds
+if [ -d wallpapers ] && [ -n "$(ls -A wallpapers 2>/dev/null)" ]; then
+    sudo cp -n wallpapers/* /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/
+else
+    echo -e "${YELLOW}Папка wallpapers пуста — обои для смены (SUPER+W) можно добавить позже.${NC}"
+fi
+
+# 12. Настройка sudoers
+echo -e "${YELLOW}=== Настройка sudoers ===${NC}"
+sudo tee /usr/local/bin/set-sddm-wallpaper.sh > /dev/null <<'EOF'
+#!/bin/bash
+set -euo pipefail
+cp "$1" "/usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.png"
+EOF
+sudo chmod 755 /usr/local/bin/set-sddm-wallpaper.sh
+echo "$USER ALL=(ALL) NOPASSWD: /usr/local/bin/set-sddm-wallpaper.sh" | sudo tee /etc/sudoers.d/wallpaper-change > /dev/null
+sudo chmod 440 /etc/sudoers.d/wallpaper-change
+
+# 13. Автозапуск PipeWire
+echo -e "${YELLOW}=== Включение PipeWire ===${NC}"
+systemctl --user enable --now pipewire pipewire-pulse wireplumber 2>/dev/null || true
+
+# 14. Включение SDDM
+echo -e "${YELLOW}=== Включение SDDM ===${NC}"
+sudo systemctl enable sddm
+
+echo ""
+echo -e "${GREEN}=== Установка завершена! ===${NC}"
+echo -e "${GREEN}Перезагрузитесь: sudo reboot${NC}"

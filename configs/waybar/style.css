@@ -1,0 +1,168 @@
+@import url("colors/colors.css");
+
+* {
+  font-family: "JetBrainsMono Nerd Font", "Font Awesome", sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+window#waybar {
+  background-color: transparent;
+  color: #ffffff;
+}
+
+#workspaces {
+  padding: 4px 10px;
+  background-color: @bg0;
+  margin: 1px 0;
+  border-radius: 25px;
+}
+
+#workspaces button {
+  transition: all 0.2s ease-in-out;
+  padding: 1px 8px;
+  background-color: @bg2;
+  border-radius: 20px;
+  min-width: 50px;
+  margin: 0 3px;
+  color: @fg;
+}
+
+#workspaces button:hover {
+  background: @fg;
+  color: @bg2;
+}
+
+#workspaces button.active {
+  transition: all 0.3s ease-in-out;
+  min-width: 80px;
+  background-color: @blue;
+  color: @bg2;
+}
+
+#workspaces button.urgent {
+  background-color: @red;
+}
+
+#clock,
+#idle_inhibitor,
+#temperature,
+#custom-weather,
+#battery,
+#network,
+#custom-power,
+#custom-notification,
+#tray,
+#pulseaudio {
+  padding: 1px 10px;
+  background-color: @bg0;
+  border-radius: 50px;
+  margin: 1px 5px;
+}
+
+#custom-weather {
+  transition: all 0.2s ease-in-out;
+  color: @grey1;
+}
+
+#idle_inhibitor {
+  transition: all 0.2s ease-in-out;
+  color: @grey1;
+}
+
+#idle_inhibitor.activated {
+  color: @yellow;
+}
+
+#temperature {
+  transition: all 0.2s ease-in-out;
+  color: @yellow;
+}
+
+#tray {
+  transition: all 0.2s ease-in-out;
+  color: @purple;
+}
+
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+  background-color: @red;
+}
+
+#custom-notification {
+  transition: all 0.2s ease-in-out;
+  color: @blue;
+}
+
+#custom-power {
+  transition: all 0.2s ease-in-out;
+  color: @red;
+}
+
+#clock {
+    transition: all 0.2s ease-in-out;
+    color: @blue;
+    min-width: 90px;   /* фиксированная ширина */
+    padding: 1px 10px;
+}
+
+#battery {
+  transition: all 0.2s ease-in-out;
+  color: @green;
+}
+
+#battery.charging,
+#battery.plugged {
+  transition: all 0.2s ease-in-out;
+  color: @green;
+}
+
+#battery.warning:not(.charging) {
+  color: @yellow;
+}
+
+#battery.critical:not(.charging) {
+  transition: all 0.2s ease-in-out;
+  color: @red;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: steps(12);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+#network {
+  transition: all 0.2s ease-in-out;
+  color: @aqua;
+}
+
+#network.disconnected {
+  transition: all 0.2s ease-in-out;
+  color: @grey0;
+}
+
+#pulseaudio {
+  transition: all 0.2s ease-in-out;
+  color: @orange;
+}
+
+#pulseaudio.muted {
+  transition: all 0.2s ease-in-out;
+  color: @grey0;
+}
+
+/* Заливка щелей между модулями */
+.modules-left,
+.modules-center,
+.modules-right {
+    background-color: @bg0;
+    border-radius: 25px;
+    margin: 4px 6px;
+    padding: 2px 8px;
+    border: 1px solid rgba(137, 180, 250, 0.15);
+    transition: all 0.2s ease-in-out;
+}

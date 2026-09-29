@@ -1,0 +1,47 @@
+configuration {
+    show-icons: true;
+}
+
+* {
+    background-color: #1e1e2e;
+    text-color: #cdd6f4;
+    border-color: #89b4fa;
+    font: "JetBrainsMono Nerd Font 12";
+}
+
+window {
+    width: 80%;
+    height: 80%;
+    border: 2px;
+    border-radius: 16px;
+    background-color: #1e1e2e;
+    padding: 24px;
+}
+
+listview {
+    columns: 4;
+    lines: 3;
+    spacing: 20px;
+    scrollbar: false;
+}
+
+element {
+    padding: 0;
+    border-radius: 12px;
+}
+
+element selected {
+    background-color: transparent;
+    border: 2px;
+    border-color: #89b4fa;
+    border-radius: 12px;
+}
+
+element-icon {
+    size: 16em;
+    border-radius: 12px;
+}
+
+element-text {
+    enabled: false;
+}

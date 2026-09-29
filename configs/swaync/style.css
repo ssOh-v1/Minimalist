@@ -1,0 +1,317 @@
+* {
+  font-family: "JetBrainsMono Nerd Font";
+}
+
+:root {
+  --cc-bg: rgba(17, 17, 27, 0.97);
+  --cc-bg-alt: rgba(24, 24, 37, 0.97);
+  --noti-border-color: rgba(166, 173, 200, 0.16);
+  --noti-bg: 24, 24, 37;
+  --noti-bg-alpha: 0.94;
+  --noti-bg-hover: rgba(49, 50, 68, 0.92);
+  --noti-bg-focus: rgba(69, 71, 90, 0.35);
+  --noti-close-bg: rgba(166, 173, 200, 0.08);
+  --noti-close-bg-hover: rgba(166, 173, 200, 0.16);
+  --text-color: rgb(239, 241, 245);
+  --text-color-muted: rgb(166, 173, 200);
+  --text-color-disabled: rgb(127, 132, 156);
+  --bg-selected: rgb(137, 180, 250);
+  --notification-icon-size: 52px;
+  --notification-app-icon-size: 18px;
+  --notification-group-icon-size: 28px;
+  --border: 1px solid var(--noti-border-color);
+  --border-radius: 14px;
+  --notification-shadow: none;
+  --font-size-body: 13px;
+  --font-size-summary: 15px;
+  --hover-tranistion: background 0.18s ease, border-color 0.18s ease,
+    transform 0.18s ease;
+  --group-collapse-tranistion: opacity 400ms ease-in-out;
+  --hover-transition: var(--hover-tranistion);
+  --group-collapse-transition: var(--group-collapse-tranistion);
+}
+
+@define-color cc-bg rgba(17, 17, 27, 0.96);
+@define-color noti-border-color rgba(166, 173, 200, 0.16);
+@define-color noti-bg rgba(24, 24, 37, 0.94);
+@define-color noti-bg-opaque rgb(24, 24, 37);
+@define-color noti-bg-darker rgb(30, 30, 46);
+@define-color noti-bg-hover rgb(49, 50, 68);
+@define-color noti-bg-hover-opaque rgb(49, 50, 68);
+@define-color noti-bg-focus rgba(69, 71, 90, 0.35);
+@define-color noti-close-bg rgba(166, 173, 200, 0.08);
+@define-color noti-close-bg-hover rgba(166, 173, 200, 0.16);
+@define-color text-color rgb(239, 241, 245);
+@define-color text-color-disabled rgb(127, 132, 156);
+@define-color bg-selected rgb(137, 180, 250);
+
+notificationwindow,
+blankwindow {
+  background: transparent;
+}
+
+.floating-notifications.background .notification-row {
+  margin: 0;
+}
+
+.control-center {
+  background: var(--cc-bg);
+  border: 1px solid rgba(166, 173, 200, 0.12);
+  border-radius: 18px;
+  box-shadow: none;
+  padding: 8px 8px 6px;
+}
+
+.control-center-list {
+  background: transparent;
+  min-height: 0;
+}
+
+.notification-row {
+  background: none;
+  outline: none;
+}
+
+.notification-row:focus {
+  background: var(--noti-bg-focus);
+}
+
+.notification-row .notification-background {
+  padding: 6px 10px;
+}
+
+.notification-row .notification-background .notification {
+  border-radius: calc(var(--border-radius) + 1px);
+  border: var(--border);
+  padding: 0;
+  transition: var(--hover-transition);
+  background: rgba(var(--noti-bg), var(--noti-bg-alpha));
+  box-shadow: var(--notification-shadow);
+}
+
+.notification-row .notification-background .notification:hover {
+  background: rgba(49, 50, 68, 0.72);
+  border-color: rgba(166, 173, 200, 0.2);
+  transform: none;
+}
+
+.notification-row .notification-background .notification .notification-default-action {
+  padding: 10px 12px;
+  margin: 0;
+  box-shadow: none;
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  transition: var(--hover-tranistion);
+  border-radius: calc(var(--border-radius) + 2px);
+}
+
+.notification-content {
+  padding-right: 6px;
+  border-spacing: 0;
+}
+
+.notification image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  margin-right: 10px;
+}
+
+.notification .app-icon {
+  margin: 2px 12px 2px 0;
+}
+
+.notification .app-name {
+  color: var(--text-color-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.notification .time {
+  color: var(--text-color-disabled);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.notification .summary {
+  color: var(--text-color);
+  font-size: var(--font-size-summary);
+  font-weight: 700;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.notification .body {
+  color: var(--text-color-muted);
+  font-size: var(--font-size-body);
+  line-height: 1.35;
+}
+
+.notification .body-image {
+  margin-top: 10px;
+  border-radius: 14px;
+}
+
+.notification-group.collapsed .notification {
+  background: rgba(24, 24, 37, 0.84);
+  border-color: rgba(127, 132, 156, 0.12);
+}
+
+.close-button {
+  background: var(--noti-close-bg);
+  color: var(--text-color);
+  text-shadow: none;
+  padding: 0;
+  border-radius: 999px;
+  margin-top: 10px;
+  margin-right: 10px;
+  box-shadow: none;
+  border: none;
+  min-width: 28px;
+  min-height: 28px;
+  opacity: 0.32;
+  transition: opacity 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.notification-row:hover .close-button {
+  opacity: 1;
+}
+
+.close-button:hover {
+  box-shadow: none;
+  background: var(--noti-close-bg-hover);
+  border: none;
+  transform: none;
+}
+
+.widget-title {
+  margin: 0 6px 8px;
+  color: var(--text-color-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.widget-title > button {
+  color: var(--text-color-muted);
+  background: transparent;
+  border: 1px solid rgba(166, 173, 200, 0.12);
+  box-shadow: none;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: var(--hover-transition);
+}
+
+.widget-title > button:hover {
+  background: rgba(166, 173, 200, 0.08);
+  color: var(--text-color);
+}
+
+.widget-notifications {
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+}
+
+.widget-notifications > box,
+.widget-notifications > scrolledwindow,
+.widget-notifications scrolledwindow,
+.widget-notifications viewport,
+.widget-notifications .control-center-list,
+.widget-notifications .control-center-list-placeholder {
+  min-height: 0;
+}
+
+.mpris,
+.widget.mpris {
+  background: rgba(24, 24, 37, 0.72);
+  border-radius: 14px;
+  margin: 4px 10px 12px;
+  padding: 12px;
+  border: 1px solid rgba(166, 173, 200, 0.1);
+  box-shadow: none;
+  background-clip: padding-box;
+}
+
+.mpris-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mpris-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-color);
+}
+
+.mpris-artist {
+  font-size: 12px;
+  color: var(--text-color-muted);
+}
+
+.mpris-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 12px;
+}
+
+.mpris-button {
+  font-size: 20px;
+  color: var(--text-color);
+  opacity: 0.82;
+  transition: all 0.2s ease;
+}
+
+.mpris-button:hover {
+  opacity: 1;
+  color: var(--text-color);
+}
+
+.widget-buttons-grid {
+  margin: 4px 10px 8px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.widget-buttons-grid button {
+  background: rgba(17, 17, 27, 0.68);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 16px;
+  color: var(--text-color-muted);
+  border: 1px solid rgba(166, 173, 200, 0.12);
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.widget-buttons-grid button:hover {
+  transform: none;
+  background: rgba(49, 50, 68, 0.82);
+  color: var(--text-color);
+}
+
+.widget-buttons-grid button:checked {
+  background: rgba(49, 50, 68, 0.82);
+  color: var(--text-color);
+  border-color: rgba(166, 173, 200, 0.2);
+}
+
+.widget-volume,
+.widget-backlight,
+widget-volume,
+widget-backlight {
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}

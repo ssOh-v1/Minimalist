@@ -1,0 +1,56 @@
+* {
+    background-color: #1e1e2e;
+    text-color: #cdd6f4;
+    border-color: #89b4fa;
+    font: "Fredoka 12";
+}
+
+window {
+    width: 45%;
+    height: 55%;
+    border: 1px;
+    border-radius: 16px;
+    background-color: #1e1e2e;
+    padding: 16px;
+}
+
+listview {
+    columns: 1;
+    lines: 10;
+    spacing: 4px;
+    scrollbar: false;
+}
+
+element {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #181825;
+    margin: 0;
+}
+
+element selected {
+    background-color: #89b4fa;
+    text-color: #1e1e2e;
+}
+
+element-text {
+    vertical-align: 0.5;
+}
+
+element-icon {
+    size: 1.2em;
+    padding-right: 8px;
+}
+
+inputbar {
+    padding: 8px;
+    background-color: #181825;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+prompt {
+    padding: 0 8px;
+    color: #89b4fa;
+    font-weight: bold;
+}

@@ -1,0 +1,46 @@
+configuration {
+    show-icons: true;
+    icon-theme: "Papirus";
+}
+
+* {
+    background-color: #1e1e2e;
+    text-color: #cdd6f4;
+    border-color: #89b4fa;
+    font: "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    width: 500px;
+    height: 500px;
+    border: 2px;
+    border-radius: 16px;
+    background-color: #1e1e2e;
+    padding: 16px;
+}
+
+listview {
+    columns: 2;
+    lines: 6;
+    spacing: 8px;
+    scrollbar: true;
+}
+
+element {
+    padding: 6px;
+    border-radius: 8px;
+}
+
+element selected {
+    background-color: #89b4fa;
+    text-color: #1e1e2e;
+}
+
+element-icon {
+    size: 2em;
+    border-radius: 6px;
+}
+
+element-text {
+    vertical-align: 0.5;
+}
