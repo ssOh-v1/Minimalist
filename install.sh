@@ -79,18 +79,21 @@ yay -S --needed --noconfirm wallust matugen bibata-cursor-theme-bin python-spoti
     echo -e "${YELLOW}Предупреждение: не все AUR-пакеты установились.${NC}"
 }
 
-# 7.5 Выбор версии окружения (fzf с превью отличий)
+# 8. Выбор версии окружения (fzf с превью отличий)
 echo -e "${YELLOW}=== Выбор версии окружения ===${NC}"
 VERSION_CHOICE=$(printf "🟢 Полная версия\n🟡 Облегчённая версия" | fzf --height=40% --reverse \
     --preview "bash configs/hypr/scripts/version-preview.sh {}" \
-    --preview-window=right:60%)
+    --preview-window=right:60%) || true
+if [[ -z "$VERSION_CHOICE" ]]; then
+    echo -e "${YELLOW}Выбор не сделан — установлена полная версия по умолчанию.${NC}"
+fi
 if [[ "$VERSION_CHOICE" == *"Облегчённая"* ]]; then
     cp configs/hypr/hyprland-lite.conf configs/hypr/hyprland.conf.selected
 else
     cp configs/hypr/hyprland.conf configs/hypr/hyprland.conf.selected
 fi
 
-# 8. Копирование конфигов
+# 9. Копирование конфигов
 echo -e "${YELLOW}=== Копирование конфигов ===${NC}"
 mkdir -p ~/.config
 for dir in hypr waybar rofi kitty swaync fastfetch; do
@@ -105,11 +108,11 @@ if [ -f configs/hypr/hyprland.conf.selected ]; then
     rm -f configs/hypr/hyprland.conf.selected
 fi
 
-# 8.5 Установка темы SDDM
+# 10. Установка темы SDDM
 echo -e "${YELLOW}=== Установка темы SDDM (ii-sddm-theme) ===${NC}"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/3d3f/ii-sddm-theme/main/setup.sh)"
 
-# 9. Копирование конфигов SDDM
+# 11. Копирование конфигов SDDM
 echo -e "${YELLOW}=== Настройка SDDM ===${NC}"
 sudo mkdir -p /etc/sddm.conf.d
 
@@ -129,7 +132,7 @@ if [ -d /usr/share/sddm/themes/ii-sddm-theme/Themes ]; then
     sudo cp configs/sddm/ii-sddm.conf /usr/share/sddm/themes/ii-sddm-theme/Themes/ 2>/dev/null || true
 fi
 
-# 10. Копирование скриптов
+# 12. Копирование скриптов
 echo -e "${YELLOW}=== Копирование скриптов ===${NC}"
 mkdir -p ~/.local/bin
 mkdir -p ~/.config/hypr/scripts
@@ -138,19 +141,20 @@ if [ -f scripts/restore-wallpaper.sh ] && [ -f scripts/change-wallpaper.sh ]; th
     chmod +x ~/.local/bin/restore-wallpaper.sh ~/.local/bin/change-wallpaper.sh
 fi
 
-# 11. Установка обоев
+# 13. Установка обоев
 echo -e "${YELLOW}=== Установка обоев ===${NC}"
 sudo mkdir -p /usr/share/sddm/themes/ii-sddm-theme/Backgrounds
-# 7.6 Выбор обоев (опционально)
 echo -e "${YELLOW}=== Хочешь ли ты скачать обои? ===${NC}"
-WALLPAPERS_CHOICE=$(printf "🎨 Да, скачать обои (670 шт.)\\n🚫 Нет, без обоев" | fzf --height=30% --reverse)
+WALLPAPERS_CHOICE=$(printf "🎨 Да, скачать обои (670 шт.)\\n🚫 Нет, без обоев" | fzf --height=30% --reverse) || true
+if [[ -z "$WALLPAPERS_CHOICE" ]]; then
+    echo -e "${YELLOW}Выбор не сделан — обои не скачиваются.${NC}"
+fi
 
 if [[ "$WALLPAPERS_CHOICE" == *"Да"* ]]; then
     echo -e "${YELLOW}Скачиваем обои из Minimalist-Wallpapers...${NC}"
     cd /tmp
     git clone --depth 1 https://github.com/ssOh-v1/Minimalist-Wallpapers.git minimal-wallpapers 2>/dev/null
     if [ -d /tmp/minimal-wallpapers ]; then
-        sudo mkdir -p /usr/share/sddm/themes/ii-sddm-theme/Backgrounds
         sudo cp /tmp/minimal-wallpapers/*.png /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
         sudo cp /tmp/minimal-wallpapers/*.jpg /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
         rm -rf /tmp/minimal-wallpapers
@@ -162,7 +166,7 @@ else
     echo -e "${YELLOW}Обои не скачаны — можно добавить позже вручную.${NC}"
 fi
 
-# 12. Настройка sudoers
+# 14. Настройка sudoers
 echo -e "${YELLOW}=== Настройка sudoers ===${NC}"
 sudo tee /usr/local/bin/set-sddm-wallpaper.sh > /dev/null <<'EOF'
 #!/bin/bash
@@ -173,11 +177,11 @@ sudo chmod 755 /usr/local/bin/set-sddm-wallpaper.sh
 echo "$USER ALL=(ALL) NOPASSWD: /usr/local/bin/set-sddm-wallpaper.sh" | sudo tee /etc/sudoers.d/wallpaper-change > /dev/null
 sudo chmod 440 /etc/sudoers.d/wallpaper-change
 
-# 13. Автозапуск PipeWire
+# 15. Автозапуск PipeWire
 echo -e "${YELLOW}=== Включение PipeWire ===${NC}"
 systemctl --user enable --now pipewire pipewire-pulse wireplumber 2>/dev/null || true
 
-# 14. Включение SDDM
+# 16. Включение SDDM
 echo -e "${YELLOW}=== Включение SDDM ===${NC}"
 sudo systemctl enable sddm
 
