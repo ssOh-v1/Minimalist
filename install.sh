@@ -197,3 +197,39 @@ sudo systemctl enable sddm
 echo ""
 echo -e "${GREEN}=== Установка завершена! ===${NC}"
 echo -e "${GREEN}Перезагрузитесь: sudo reboot${NC}"
+
+# 17. Установка темы GRUB
+echo -e "${YELLOW}=== Установка темы GRUB ===${NC}"
+if [ -d configs/grub/themes ]; then
+    sudo mkdir -p /usr/share/grub/themes
+    sudo cp -r configs/grub/themes/* /usr/share/grub/themes/
+    
+    # Используем тему catppuccin-mocha-grub-theme (как у автора)
+    GRUB_THEME_NAME="catppuccin-mocha-grub-theme"
+    
+    if [ -d "/usr/share/grub/themes/$GRUB_THEME_NAME" ]; then
+        # Прописываем тему в /etc/default/grub
+        if grep -q "^GRUB_THEME=" /etc/default/grub; then
+            sudo sed -i "s|^GRUB_THEME=.*|GRUB_THEME=\"/usr/share/grub/themes/$GRUB_THEME_NAME/theme.txt\"|" /etc/default/grub
+        else
+            echo "GRUB_THEME=\"/usr/share/grub/themes/$GRUB_THEME_NAME/theme.txt\"" | sudo tee -a /etc/default/grub
+        fi
+        
+        # Убеждаемся, что GRUB_TERMINAL_OUTPUT=gfxterm
+        if grep -q "^GRUB_TERMINAL_OUTPUT=" /etc/default/grub; then
+            sudo sed -i 's|^GRUB_TERMINAL_OUTPUT=.*|GRUB_TERMINAL_OUTPUT="gfxterm"|' /etc/default/grub
+        else
+            echo 'GRUB_TERMINAL_OUTPUT="gfxterm"' | sudo tee -a /etc/default/grub
+        fi
+        
+        echo -e "${GREEN}Тема GRUB установлена: $GRUB_THEME_NAME${NC}"
+        
+        # Пересобираем конфиг GRUB
+        echo -e "${YELLOW}Пересобираем конфиг GRUB...${NC}"
+        sudo grub-mkconfig -o /boot/grub/grub.cfg 2>/dev/null || {
+            echo -e "${YELLOW}Не удалось пересобрать GRUB — сделай это вручную: sudo grub-mkconfig -o /boot/grub/grub.cfg${NC}"
+        }
+    fi
+else
+    echo -e "${YELLOW}Тема GRUB не найдена в репозитории — пропускаем.${NC}"
+fi
