@@ -161,19 +161,19 @@ if [ -d /tmp/minimal-wallpapers ]; then
     sudo cp /tmp/minimal-wallpapers/*.png /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
     sudo cp /tmp/minimal-wallpapers/*.jpg /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
     
-    # Берём первую обоину и делаем её background.png
-    FIRST_WALLPAPER=$(ls /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ | head -1)
-    if [ -n "$FIRST_WALLPAPER" ]; then
-        sudo cp "/usr/share/sddm/themes/ii-sddm-theme/Backgrounds/$FIRST_WALLPAPER" \
-                /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.png
-        echo -e "${GREEN}Обои установлены! (${FIRST_WALLPAPER} → background.png)${NC}"
-    fi
+      # Берём первую обоину и делаем её background.png
+      FIRST_WALLPAPER=$(ls /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ | head -1)
+      if [ -n "$FIRST_WALLPAPER" ]; then
+          sudo cp "/usr/share/sddm/themes/ii-sddm-theme/Backgrounds/$FIRST_WALLPAPER" \
+                  /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.png
+          echo -e "${GREEN}Обои установлены! (${FIRST_WALLPAPER} → background.png)${NC}"
+      fi
     
-    rm -rf /tmp/minimal-wallpapers
-else
-    echo -e "${RED}Не удалось скачать обои. Пропускаем.${NC}"
+      rm -rf /tmp/minimal-wallpapers
+  else
+      echo -e "${RED}Не удалось скачать обои. Пропускаем.${NC}"
+  fi
 fi
-
 # 14. Настройка sudoers
 echo -e "${YELLOW}=== Настройка sudoers ===${NC}"
 sudo tee /usr/local/bin/set-sddm-wallpaper.sh > /dev/null <<'EOF'
