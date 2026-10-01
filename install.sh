@@ -5,10 +5,23 @@
 
 set -euo pipefail
 
+# Определяем директорию скрипта (для запуска из любого места)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
+
+# Проверка sudo (запрашиваем пароль один раз, дальше кэшируется)
+if ! sudo -n true 2>/dev/null; then
+    echo -e "${YELLOW}Для установки нужен sudo. Введи пароль:${NC}"
+    sudo -v || { echo -e "${RED}sudo не работает — выход${NC}"; exit 1; }
+fi
+
+# Обновляем sudo timestamp в фоне, чтобы долгая установка не прервалась
+( while true; do sudo -n true 2>/dev/null; sleep 60; kill -0 "$$" 2>/dev/null || exit; done ) 2>/dev/null &
 
 echo -e "${GREEN}=== Minimalist: установка ===${NC}"
 
@@ -24,7 +37,7 @@ if ! ping -c 1 -W 3 archlinux.org &>/dev/null; then
     exit 1
 fi
 
-if [ ! -d "configs" ]; then
+if [ ! -d "$SCRIPT_DIR/configs" ]; then
     echo -e "${RED}Ошибка: запустите скрипт из папки Minimalist.${NC}"
     exit 1
 fi
@@ -92,7 +105,7 @@ if [[ -z "$VERSION_CHOICE" ]]; then
     echo -e "${YELLOW}Выбор не сделан — установлена полная версия по умолчанию.${NC}"
 fi
 if [[ "$VERSION_CHOICE" == *"Облегчённая"* ]]; then
-    cp configs/hypr/hyprland-lite.conf configs/hypr/hyprland.conf.selected
+    cp "$SCRIPT_DIR/configs/hypr/hyprland-lite.conf" configs/hypr/hyprland.conf.selected
 else
     cp configs/hypr/hyprland.conf configs/hypr/hyprland.conf.selected
 fi
@@ -108,14 +121,14 @@ done
 
 # Применяем выбранную версию hyprland.conf
 if [ -f configs/hypr/hyprland.conf.selected ]; then
-    cp configs/hypr/hyprland.conf.selected ~/.config/hypr/hyprland.conf
+    cp "$SCRIPT_DIR/configs/hypr/hyprland.conf.selected" ~/.config/hypr/hyprland.conf
     rm -f configs/hypr/hyprland.conf.selected
 fi
 
 # 9.1 Копируем конфиг hyprpaper (обои)
 mkdir -p ~/.config/hypr
 if [ -f configs/hypr/hyprpaper.conf ]; then
-    cp configs/hypr/hyprpaper.conf ~/.config/hypr/hyprpaper.conf
+    cp "$SCRIPT_DIR/configs/hypr/hyprpaper.conf" ~/.config/hypr/hyprpaper.conf
     echo -e "${GREEN}hyprpaper.conf установлен${NC}"
 else
     echo -e "${YELLOW}configs/hypr/hyprpaper.conf не найден — пропускаем${NC}"
@@ -216,9 +229,9 @@ sudo systemctl enable sddm
 
 # 17. Установка темы GRUB
 echo -e "${YELLOW}=== Установка темы GRUB ===${NC}"
-if [ -d configs/grub/themes ]; then
+if [ -d "$SCRIPT_DIR/configs/grub/themes" ]; then
     sudo mkdir -p /usr/share/grub/themes
-    sudo cp -r configs/grub/themes/* /usr/share/grub/themes/
+    sudo cp -r "$SCRIPT_DIR/configs/grub/themes/"* /usr/share/grub/themes/
     
     # Используем тему catppuccin-mocha-grub-theme (как у автора)
     GRUB_THEME_NAME="catppuccin-mocha-grub-theme"
@@ -242,9 +255,14 @@ if [ -d configs/grub/themes ]; then
         
         # Пересобираем конфиг GRUB
         echo -e "${YELLOW}Пересобираем конфиг GRUB...${NC}"
-        sudo grub-mkconfig -o /boot/grub/grub.cfg 2>/dev/null || {
-            echo -e "${YELLOW}Не удалось пересобрать GRUB — сделай это вручную: sudo grub-mkconfig -o /boot/grub/grub.cfg${NC}"
-        }
+        # grub-mkconfig может вернуть non-zero, если нет других ОС — это не ошибка
+        set +e
+        sudo grub-mkconfig -o /boot/grub/grub.cfg
+        GRUB_RC=$?
+        set -e
+        if [ $GRUB_RC -ne 0 ]; then
+            echo -e "${YELLOW}grub-mkconfig вернул код $GRUB_RC — проверь вручную: sudo grub-mkconfig -o /boot/grub/grub.cfg${NC}"
+        fi
     fi
 else
     echo -e "${YELLOW}Тема GRUB не найдена в репозитории — пропускаем.${NC}"
