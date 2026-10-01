@@ -48,6 +48,7 @@ fi
 echo -e "${YELLOW}=== Установка базовых пакетов ===${NC}"
 sudo pacman -S --needed --noconfirm \
     batsignal hyprpicker pamixer brightnessctl jq nemo fzf \
+    ttf-nerd-fonts-symbols ttf-font-awesome noto-fonts noto-fonts-emoji \
     hyprland hyprpaper hyprlock hypridle hyprpolkitagent \
     xdg-desktop-portal-hyprland \
     waybar rofi kitty swaync cliphist fastfetch \
@@ -57,6 +58,10 @@ sudo pacman -S --needed --noconfirm \
     fuzzel wl-clipboard grim slurp \
     weston \
     base-devel git wget curl reflector
+
+# Обновляем кэш шрифтов
+echo -e "${YELLOW}=== Обновление кэша шрифтов ===${NC}"
+fc-cache -fv
 
 # 6. Установка yay
 if ! command -v yay &>/dev/null; then
@@ -141,38 +146,43 @@ if [ -f scripts/restore-wallpaper.sh ] && [ -f scripts/change-wallpaper.sh ]; th
 fi
 
 # 13. Установка обоев
-echo -e "${YELLOW}=== Установка обоев ===${NC}"
-sudo mkdir -p /usr/share/sddm/themes/ii-sddm-theme/Backgrounds
 echo -e "${YELLOW}=== Хочешь ли ты скачать обои? ===${NC}"
-WALLPAPERS_CHOICE=$(printf "🎨 Да, скачать обои (670 шт.)\\n🚫 Нет, без обоев" | fzf --height=30% --reverse) || true
-if [[ -z "$WALLPAPERS_CHOICE" ]]; then
-    echo -e "${YELLOW}Выбор не сделан — обои не скачиваются.${NC}"
-fi
+WALLPAPERS_CHOICE=$(printf "🎨 Да, скачать обои (670 шт.)\\n🚫 Нет, без обоев" | fzf --height=30% --reverse)
 
 if [[ "$WALLPAPERS_CHOICE" == *"Да"* ]]; then
     echo -e "${YELLOW}Скачиваем обои из Minimalist-Wallpapers...${NC}"
     cd /tmp
-git clone --depth 1 https://github.com/ssOh-v1/Minimalist-Wallpapers.git minimal-wallpapers 2>/dev/null
-if [ -d /tmp/minimal-wallpapers ]; then
-    # Создаём папку для обоев
-    sudo mkdir -p /usr/share/sddm/themes/ii-sddm-theme/Backgrounds
+    git clone --depth 1 https://github.com/ssOh-v1/Minimalist-Wallpapers.git minimal-wallpapers 2>/dev/null
     
-    # Копируем все обои
-    sudo cp /tmp/minimal-wallpapers/*.png /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
-    sudo cp /tmp/minimal-wallpapers/*.jpg /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
-    
-      # Берём первую обоину и делаем её background.png
-      FIRST_WALLPAPER=$(ls /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ | head -1)
-      if [ -n "$FIRST_WALLPAPER" ]; then
-          sudo cp "/usr/share/sddm/themes/ii-sddm-theme/Backgrounds/$FIRST_WALLPAPER" \
-                  /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.png
-          echo -e "${GREEN}Обои установлены! (${FIRST_WALLPAPER} → background.png)${NC}"
-      fi
-    
-      rm -rf /tmp/minimal-wallpapers
-  else
-      echo -e "${RED}Не удалось скачать обои. Пропускаем.${NC}"
-  fi
+    if [ -d /tmp/minimal-wallpapers ]; then
+        # Создаём папку для обоев
+        sudo mkdir -p /usr/share/sddm/themes/ii-sddm-theme/Backgrounds
+        
+        # Копируем все обои
+        sudo cp /tmp/minimal-wallpapers/*.png /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
+        sudo cp /tmp/minimal-wallpapers/*.jpg /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ 2>/dev/null
+        
+        # Берём первую обоину и делаем её background.png
+        FIRST_WALLPAPER=$(ls /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ | head -1)
+        if [ -n "$FIRST_WALLPAPER" ]; then
+            sudo cp "/usr/share/sddm/themes/ii-sddm-theme/Backgrounds/$FIRST_WALLPAPER" \
+                    /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.png
+            echo -e "${GREEN}Обои установлены! (${FIRST_WALLPAPER} → background.png)${NC}"
+        fi
+        
+        rm -rf /tmp/minimal-wallpapers
+    else
+        echo -e "${RED}Не удалось скачать обои. Пропускаем.${NC}"
+    fi
+else
+    echo -e "${YELLOW}Обои не скачаны — можно добавить позже.${NC}"
+fi
+
+# Перезапускаем hyprpaper, чтобы обои применились
+if command -v hyprpaper &>/dev/null; then
+    pkill hyprpaper
+    sleep 1
+    hyprpaper &
 fi
 # 14. Настройка sudoers
 echo -e "${YELLOW}=== Настройка sudoers ===${NC}"
