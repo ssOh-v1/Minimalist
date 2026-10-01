@@ -54,7 +54,6 @@ sudo pacman -S --needed --noconfirm \
     sddm qt6-5compat qt6-shadertools qt6-declarative \
     pipewire pipewire-pulse pipewire-alsa wireplumber \
     pavucontrol network-manager-applet blueman bluez bluez-utils \
-    ttf-fredoka noto-fonts noto-fonts-emoji \
     fuzzel wl-clipboard grim slurp \
     weston \
     base-devel git wget curl reflector
