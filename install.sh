@@ -194,10 +194,6 @@ systemctl --user enable --now pipewire pipewire-pulse wireplumber 2>/dev/null ||
 echo -e "${YELLOW}=== Включение SDDM ===${NC}"
 sudo systemctl enable sddm
 
-echo ""
-echo -e "${GREEN}=== Установка завершена! ===${NC}"
-echo -e "${GREEN}Перезагрузитесь: sudo reboot${NC}"
-
 # 17. Установка темы GRUB
 echo -e "${YELLOW}=== Установка темы GRUB ===${NC}"
 if [ -d configs/grub/themes ]; then
@@ -233,3 +229,7 @@ if [ -d configs/grub/themes ]; then
 else
     echo -e "${YELLOW}Тема GRUB не найдена в репозитории — пропускаем.${NC}"
 fi
+
+echo ""
+echo -e "${GREEN}=== Установка завершена! ===${NC}"
+echo -e "${GREEN}Перезагрузитесь: sudo reboot${NC}"
