@@ -23,8 +23,15 @@ if [ -f "$FULL_PATH" ]; then
     # 2. Обновляем конфиг hyprpaper в НОВОМ формате
     cat > "$HYPRPAPER_CONF" <<EOF
 preload = $TARGET
-wallpaper = ,$TARGET
+
+wallpaper {
+    monitor =
+    path = $TARGET
+    fit_mode = cover
+}
+
 splash = false
+ipc = on
 EOF
 
     # 3. Перезапускаем hyprpaper
