@@ -77,6 +77,7 @@ sudo pacman -S --needed --noconfirm \
     pavucontrol network-manager-applet blueman bluez bluez-utils \
     fuzzel wl-clipboard grim slurp \
     gamemode lib32-gamemode \
+    socat \
     weston \
     base-devel git wget curl reflector
 
