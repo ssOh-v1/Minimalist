@@ -57,6 +57,13 @@ if command -v reflector &>/dev/null; then
     sudo reflector --country Russia --latest 20 --sort rate --save /etc/pacman.d/mirrorlist 2>/dev/null || true
 fi
 
+# 4.5. Включение multilib (нужен для 32-битных Steam-библиотек)
+echo -e "${YELLOW}=== Проверка репозитория multilib ===${NC}"
+if ! grep -q "^\[multilib\]" /etc/pacman.conf; then
+    sudo sed -i "/^#\[multilib\]/,+1s/^#//" /etc/pacman.conf
+    sudo pacman -Sy
+fi
+
 # 5. Установка базовых пакетов
 echo -e "${YELLOW}=== Установка базовых пакетов ===${NC}"
 sudo pacman -S --needed --noconfirm \
@@ -69,12 +76,31 @@ sudo pacman -S --needed --noconfirm \
     pipewire pipewire-pulse pipewire-alsa wireplumber \
     pavucontrol network-manager-applet blueman bluez bluez-utils \
     fuzzel wl-clipboard grim slurp \
+    gamemode lib32-gamemode \
     weston \
     base-devel git wget curl reflector
 
 # Обновляем кэш шрифтов
 echo -e "${YELLOW}=== Обновление кэша шрифтов ===${NC}"
 fc-cache -fv
+
+# 5.5. NVIDIA — драйвер и PRIME render offload (только если карта реально есть)
+if lspci -k | grep -qi nvidia; then
+    echo -e "${YELLOW}=== Обнаружена NVIDIA — ставим драйвер и Vulkan ===${NC}"
+    sudo pacman -S --needed --noconfirm \
+        nvidia-dkms nvidia-utils nvidia-settings opencl-nvidia \
+        lib32-nvidia-utils vulkan-icd-loader lib32-vulkan-icd-loader
+
+    if ! grep -q "nvidia" /etc/mkinitcpio.conf; then
+        sudo sed -i 's/^MODULES=(\(.*\))/MODULES=(\1 nvidia nvidia_modeset nvidia_uevent nvidia_drm)/' /etc/mkinitcpio.conf
+        sudo mkinitcpio -P
+    fi
+
+    if [ -f /etc/default/grub ] && ! grep -q "nvidia-drm.modeset=1" /etc/default/grub; then
+        sudo sed -i 's/\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 nvidia-drm.modeset=1"/' /etc/default/grub
+        sudo grub-mkconfig -o /boot/grub/grub.cfg
+    fi
+fi
 
 # 6. Установка yay
 if ! command -v yay &>/dev/null; then
