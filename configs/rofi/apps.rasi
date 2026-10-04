@@ -4,20 +4,21 @@ configuration {
 }
 
 * {
-    background-color: #11111b;
-    text-color: #cdd6f4;
-    border-color: #89b4fa;
+    background-color: #1e1e2e;   /* @bg0 — как основной фон модулей Waybar */
+    text-color: #cdd6f4;         /* @fg */
+    border-color: #89b4fa;       /* @blue — акцент как у активных модулей */
     font: "JetBrainsMono Nerd Font 13";
 }
 
 window {
     location: west;
     anchor: west;
-    x-offset: 20px;
+    x-offset: 12px;
+    y-offset: -60px;
     width: 400px;
     border: 1px;
-    border-radius: 20px;
-    background-color: #11111b;
+    border-radius: 25px;         /* как скругление #workspaces в Waybar */
+    background-color: #1e1e2e;
     padding: 16px;
 }
 
@@ -38,19 +39,19 @@ scrollbar {
     width: 4px;
     handle-width: 4px;
     border-radius: 10px;
-    background-color: #1e1e2e;
+    background-color: #313244;   /* @bg2 — как кнопки воркспейсов */
     handle-color: #89b4fa;
 }
 
 element {
     padding: 8px 12px;
-    border-radius: 8px;
-    background-color: #1e1e2e;
+    border-radius: 20px;         /* как кнопки #workspaces */
+    background-color: #313244;   /* @bg2 */
 }
 
 element selected {
-    background-color: #89b4fa;
-    text-color: #1e1e2e;
+    background-color: #89b4fa;   /* @blue */
+    text-color: #313244;         /* @bg2 — тёмный текст на синем, как активный воркспейс */
 }
 
 element-text {
@@ -64,19 +65,19 @@ element-icon {
 
 inputbar {
     padding: 8px;
-    background-color: #1e1e2e;
-    border-radius: 8px;
+    background-color: #313244;   /* @bg2 */
+    border-radius: 20px;
     margin: 0px 0px 8px 0px;
     children: [ "prompt", "entry" ];
 }
 
 prompt {
     padding: 0 8px;
-    color: #89b4fa;
+    color: #89b4fa;              /* @blue */
     font-weight: bold;
 }
 
 entry {
     placeholder: "Поиск приложений...";
-    placeholder-color: #6c7086;
+    placeholder-color: #6c7086;  /* @grey0 */
 }
