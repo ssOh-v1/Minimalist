@@ -213,10 +213,13 @@ if [[ "$WALLPAPERS_CHOICE" == *"Да"* ]]; then
         
         # Берём первую обоину и делаем её background.png
         FIRST_WALLPAPER=$(ls /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/ | head -1)
+        EXT="${FIRST_WALLPAPER##*.}"
+        EXT_LOWER=$(echo "$EXT" | tr '[:upper:]' '[:lower:]')
         if [ -n "$FIRST_WALLPAPER" ]; then
+            sudo rm -f /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.*
             sudo cp "/usr/share/sddm/themes/ii-sddm-theme/Backgrounds/$FIRST_WALLPAPER" \
-                    /usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.png
-            echo -e "${GREEN}Обои установлены! (${FIRST_WALLPAPER} → background.png)${NC}"
+                    "/usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.$EXT_LOWER"
+            echo -e "${GREEN}Обои установлены! (${FIRST_WALLPAPER} → background.${EXT_LOWER})${NC}"
         fi
         
         rm -rf ~/minimal-wallpapers
@@ -240,7 +243,12 @@ echo -e "${YELLOW}=== Настройка sudoers ===${NC}"
 sudo tee /usr/local/bin/set-sddm-wallpaper.sh > /dev/null <<'EOF'
 #!/bin/bash
 set -euo pipefail
-cp "$1" "/usr/share/sddm/themes/ii-sddm-theme/Backgrounds/background.png"
+SRC="$1"
+EXT="${SRC##*.}"
+EXT_LOWER=$(echo "$EXT" | tr '[:upper:]' '[:lower:]')
+BG_DIR="/usr/share/sddm/themes/ii-sddm-theme/Backgrounds"
+rm -f "$BG_DIR"/background.*
+cp "$SRC" "$BG_DIR/background.$EXT_LOWER"
 EOF
 sudo chmod 755 /usr/local/bin/set-sddm-wallpaper.sh
 echo "$USER ALL=(ALL) NOPASSWD: /usr/local/bin/set-sddm-wallpaper.sh" | sudo tee /etc/sudoers.d/wallpaper-change > /dev/null
