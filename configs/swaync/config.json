@@ -54,7 +54,7 @@
   },
   "widgets": [
     "title",
-    "buttons-grid#spotify",
+    "mpris",
     "notifications",
     "buttons-grid"
   ],
@@ -79,13 +79,11 @@
       "max-lines": 5,
       "text": "Label Text"
     },
-    "buttons-grid#spotify": {
-      "actions": [
-        {
-          "label": "  Открыть меню Spotify",
-          "command": "~/.config/hypr/scripts/spotify-rofi-menu.sh"
-        }
-      ]
+    "mpris": {
+      "blacklist": [],
+      "autohide": false,
+      "show-album-art": "always",
+      "loop-carousel": false
     },
     "buttons-grid": {
       "actions": [
