@@ -19,34 +19,31 @@ class PowerPanel(Gtk.Window):
         GtkLayerShell.set_namespace(self, "power-panel")
         GtkLayerShell.set_layer(self, GtkLayerShell.Layer.TOP)
 
-        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
+        # Нижний правый угол экрана
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.BOTTOM, True)
         GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 36)
-        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 10)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.BOTTOM, 14)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, 14)
 
-        self.set_size_request(240, 0)
         self.set_decorated(False)
 
         css_provider = Gtk.CssProvider()
         css_provider.load_from_data(b"""
             window, .background {
                 background-color: #11111b;
-                border-radius: 20px;
+                border-radius: 16px;
                 border: 1px solid #89b4fa;
-            }
-            label {
-                color: #cdd6f4;
-                font-size: 14px;
-                background-color: transparent;
             }
             button {
                 background-image: none;
                 background-color: #1e1e2e;
                 color: #cdd6f4;
                 border: 1px solid #89b4fa;
-                border-radius: 8px;
-                padding: 8px 10px;
-                min-height: 36px;
+                border-radius: 10px;
+                min-width: 46px;
+                min-height: 46px;
+                padding: 0px;
+                font-size: 18px;
                 box-shadow: none;
                 text-shadow: none;
             }
@@ -64,30 +61,26 @@ class PowerPanel(Gtk.Window):
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
 
-        main_vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-        main_vbox.set_margin_top(15)
-        main_vbox.set_margin_bottom(15)
-        main_vbox.set_margin_start(15)
-        main_vbox.set_margin_end(15)
-        self.add(main_vbox)
+        main_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        main_hbox.set_margin_top(10)
+        main_hbox.set_margin_bottom(10)
+        main_hbox.set_margin_start(10)
+        main_hbox.set_margin_end(10)
+        self.add(main_hbox)
 
-        title = Gtk.Label()
-        title.set_markup("<b>⏻ Питание</b>")
-        title.set_xalign(0)
-        main_vbox.pack_start(title, False, False, 4)
-
+        # Иконки в стиле Nerd Font (Font Awesome), без подписей
         actions = [
-            ("🔒  Блокировка", ["hyprlock"]),
-            ("🌙  Сон", ["systemctl", "suspend"]),
-            ("🚪  Выход (SDDM)", ["hyprctl", "dispatch", "exit"]),
-            ("🔄  Перезагрузка", ["systemctl", "reboot"]),
-            ("⏻  Выключение", ["systemctl", "poweroff"]),
+            ("\uf023", ["hyprlock"]),                              # lock
+            ("\uf186", ["systemctl", "suspend"]),                  # moon / sleep
+            ("\uf08b", ["hyprctl", "dispatch", "exit"]),           # sign-out
+            ("\uf021", ["systemctl", "reboot"]),                   # refresh
+            ("\uf011", ["systemctl", "poweroff"]),                 # power-off
         ]
 
-        for label_text, cmd in actions:
-            btn = Gtk.Button(label=label_text)
+        for icon, cmd in actions:
+            btn = Gtk.Button(label=icon)
             btn.connect("clicked", self.on_action, cmd)
-            main_vbox.pack_start(btn, False, False, 0)
+            main_hbox.pack_start(btn, False, False, 0)
 
         self.show_all()
 
