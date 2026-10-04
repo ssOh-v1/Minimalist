@@ -74,7 +74,7 @@ class PowerPanel(Gtk.Window):
             ("\uf186", ["systemctl", "suspend"]),                  # moon / sleep
             ("\uf08b", ["hyprctl", "dispatch", "exit"]),           # sign-out
             ("\uf021", ["systemctl", "reboot"]),                   # refresh
-            ("\uf011", ["systemctl", "poweroff"]),                 # power-off
+            ("⏻", ["systemctl", "poweroff"]),                   # power symbol
         ]
 
         for icon, cmd in actions:
