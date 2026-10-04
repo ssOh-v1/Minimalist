@@ -14,7 +14,7 @@ window {
     location: west;
     anchor: west;
     x-offset: 12px;
-    y-offset: -60px;
+    y-offset: -110px;
     width: 400px;
     border: 1px;
     border-radius: 25px;         /* как скругление #workspaces в Waybar */

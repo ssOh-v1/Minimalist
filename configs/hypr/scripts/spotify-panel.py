@@ -33,9 +33,9 @@ class SpotifyPanel(Gtk.Window):
         css_provider = Gtk.CssProvider()
         css_provider.load_from_data(b"""
             window, .background {
-                background-color: #11111b;
-                border-radius: 20px;
-                border: 1px solid #89b4fa;
+                background-color: #1e1e2e;
+                border-radius: 25px;
+                border: 1px solid rgba(137, 180, 250, 0.15);
             }
             label {
                 color: #cdd6f4;
@@ -44,10 +44,10 @@ class SpotifyPanel(Gtk.Window):
             }
             button {
                 background-image: none;
-                background-color: #1e1e2e;
+                background-color: #313244;
                 color: #cdd6f4;
-                border: 1px solid #89b4fa;
-                border-radius: 8px;
+                border: none;
+                border-radius: 20px;
                 padding: 6px 10px;
                 min-width: 36px;
                 min-height: 36px;
@@ -56,10 +56,10 @@ class SpotifyPanel(Gtk.Window):
             }
             button:hover {
                 background-color: #89b4fa;
-                color: #1e1e2e;
+                color: #313244;
             }
             scale trough {
-                background-color: #1e1e2e;
+                background-color: #313244;
                 border-radius: 4px;
                 min-height: 8px;
             }
@@ -75,7 +75,7 @@ class SpotifyPanel(Gtk.Window):
                 margin: -3px;
             }
             box {
-                background-color: #11111b;
+                background-color: #1e1e2e;
             }
         """)
         Gtk.StyleContext.add_provider_for_screen(

@@ -30,16 +30,16 @@ class PowerPanel(Gtk.Window):
         css_provider = Gtk.CssProvider()
         css_provider.load_from_data(b"""
             window, .background {
-                background-color: #11111b;
-                border-radius: 16px;
-                border: 1px solid #89b4fa;
+                background-color: #1e1e2e;
+                border-radius: 25px;
+                border: 1px solid rgba(137, 180, 250, 0.15);
             }
             button {
                 background-image: none;
-                background-color: #1e1e2e;
+                background-color: #313244;
                 color: #cdd6f4;
-                border: 1px solid #89b4fa;
-                border-radius: 10px;
+                border: none;
+                border-radius: 20px;
                 min-width: 46px;
                 min-height: 46px;
                 padding: 0px;
@@ -49,10 +49,10 @@ class PowerPanel(Gtk.Window):
             }
             button:hover {
                 background-color: #89b4fa;
-                color: #1e1e2e;
+                color: #313244;
             }
             box {
-                background-color: #11111b;
+                background-color: #1e1e2e;
             }
         """)
         Gtk.StyleContext.add_provider_for_screen(
