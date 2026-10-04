@@ -32,7 +32,7 @@ class PowerPanel(Gtk.Window):
             window, .background {
                 background-color: #1e1e2e;
                 border-radius: 25px;
-                border: 1px solid rgba(137, 180, 250, 0.15);
+                border: 1px solid #89b4fa;
             }
             button {
                 background-image: none;

@@ -163,6 +163,6 @@ window#waybar {
     border-radius: 25px;
     margin: 4px 6px;
     padding: 2px 8px;
-    border: 1px solid rgba(137, 180, 250, 0.15);
+    border: 1px solid @blue;
     transition: all 0.2s ease-in-out;
 }
