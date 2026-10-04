@@ -1,3 +1,8 @@
+configuration {
+    show-icons: true;
+    drun-match-fields: "name";
+}
+
 * {
     background-color: #11111b;
     text-color: #cdd6f4;
@@ -9,7 +14,7 @@ window {
     location: west;
     anchor: west;
     x-offset: 20px;
-    width: 340px;
+    width: 400px;
     border: 1px;
     border-radius: 20px;
     background-color: #11111b;
@@ -23,10 +28,18 @@ mainbox {
 
 listview {
     columns: 1;
-    lines: 10;
+    lines: 12;
     spacing: 4px;
-    scrollbar: false;
+    scrollbar: true;
     background-color: transparent;
+}
+
+scrollbar {
+    width: 4px;
+    handle-width: 4px;
+    border-radius: 10px;
+    background-color: #1e1e2e;
+    handle-color: #89b4fa;
 }
 
 element {
@@ -45,7 +58,7 @@ element-text {
 }
 
 element-icon {
-    size: 1.2em;
+    size: 1.4em;
     padding-right: 8px;
 }
 
