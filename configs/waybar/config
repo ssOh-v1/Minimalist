@@ -16,7 +16,8 @@
     	"temperature",
     	"battery",
     	"tray",
-    	"custom/notification"
+    	"custom/notification",
+    	"custom/power"
     ],
 "tray": {
     "icon-size": 18,
@@ -67,9 +68,15 @@
         "return-type": "json",
         "exec-if": "which swaync-client",
         "exec": "swaync-client -swb",
-        "on-click": "swaync-client -t -sw",
+        "on-click": "swaync-client -sw",
         "on-click-right": "swaync-client -d -sw",
         "escape": true
+    },
+    "custom/power": {
+        "format": "⏻",
+        "tooltip": true,
+        "tooltip-format": "Меню питания (CTRL+Z)",
+        "on-click": "~/.config/hypr/scripts/toggle-power-panel.sh"
     },
     "pulseaudio": {
         "format": "{icon}  {volume}%",

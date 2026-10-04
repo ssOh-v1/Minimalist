@@ -55,8 +55,7 @@
   "widgets": [
     "title",
     "mpris",
-    "notifications",
-    "buttons-grid"
+    "notifications"
   ],
   "widget-config": {
     "notifications": {
@@ -84,30 +83,6 @@
       "autohide": false,
       "show-album-art": "always",
       "loop-carousel": false
-    },
-    "buttons-grid": {
-      "actions": [
-        {
-          "label": "",
-          "command": "hyprlock"
-        },
-        {
-          "label": "󰒲",
-          "command": "systemctl suspend"
-        },
-        {
-          "label": "󰍃",
-          "command": "hyprctl dispatch exit"
-        },
-        {
-          "label": "",
-          "command": "systemctl reboot"
-        },
-        {
-          "label": "",
-          "command": "systemctl poweroff"
-        }
-      ]
     }
   }
 }
