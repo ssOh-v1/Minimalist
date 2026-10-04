@@ -1,0 +1,67 @@
+* {
+    background-color: #11111b;
+    text-color: #cdd6f4;
+    border-color: #89b4fa;
+    font: "JetBrainsMono Nerd Font 13";
+}
+
+window {
+    location: west;
+    anchor: west;
+    x-offset: 20px;
+    width: 320px;
+    border: 1px;
+    border-radius: 20px;
+    background-color: #11111b;
+    padding: 14px;
+}
+
+mainbox {
+    background-color: transparent;
+    spacing: 10px;
+}
+
+message {
+    background-color: #1e1e2e;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 0px 0px 4px 0px;
+}
+
+textbox {
+    text-color: #89b4fa;
+    font: "JetBrainsMono Nerd Font Bold 12";
+}
+
+listview {
+    columns: 1;
+    lines: 5;
+    spacing: 6px;
+    scrollbar: false;
+    background-color: transparent;
+}
+
+element {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #1e1e2e;
+}
+
+element selected {
+    background-color: #89b4fa;
+    text-color: #1e1e2e;
+}
+
+inputbar {
+    padding: 8px;
+    background-color: #1e1e2e;
+    border-radius: 8px;
+    margin: 0px 0px 8px 0px;
+    children: [ "prompt" ];
+}
+
+prompt {
+    padding: 0 8px;
+    color: #89b4fa;
+    font-weight: bold;
+}
