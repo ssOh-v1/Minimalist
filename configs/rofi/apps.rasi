@@ -1,0 +1,69 @@
+* {
+    background-color: #11111b;
+    text-color: #cdd6f4;
+    border-color: #89b4fa;
+    font: "JetBrainsMono Nerd Font 13";
+}
+
+window {
+    location: west;
+    anchor: west;
+    x-offset: 20px;
+    width: 340px;
+    border: 1px;
+    border-radius: 20px;
+    background-color: #11111b;
+    padding: 16px;
+}
+
+mainbox {
+    background-color: transparent;
+    spacing: 10px;
+}
+
+listview {
+    columns: 1;
+    lines: 10;
+    spacing: 4px;
+    scrollbar: false;
+    background-color: transparent;
+}
+
+element {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: #1e1e2e;
+}
+
+element selected {
+    background-color: #89b4fa;
+    text-color: #1e1e2e;
+}
+
+element-text {
+    vertical-align: 0.5;
+}
+
+element-icon {
+    size: 1.2em;
+    padding-right: 8px;
+}
+
+inputbar {
+    padding: 8px;
+    background-color: #1e1e2e;
+    border-radius: 8px;
+    margin: 0px 0px 8px 0px;
+    children: [ "prompt", "entry" ];
+}
+
+prompt {
+    padding: 0 8px;
+    color: #89b4fa;
+    font-weight: bold;
+}
+
+entry {
+    placeholder: "Поиск приложений...";
+    placeholder-color: #6c7086;
+}
