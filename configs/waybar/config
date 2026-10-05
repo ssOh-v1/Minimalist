@@ -11,7 +11,6 @@
         "hyprland/workspaces"
     ],
     "modules-right": [
-    	"idle_inhibitor",
     	"pulseaudio",
     	"temperature",
     	"battery",
@@ -36,13 +35,6 @@
             "*": 4
         }
     },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
 "clock": {
     "interval": 1,
     "format": "{:%H:%M:%S}",
@@ -54,7 +46,7 @@
 },
     "custom/notification": {
         "tooltip": true,
-        "format": "{icon}  ",
+        "format": "{icon}",
         "format-icons": {
             "notification": "",
             "none": "",
