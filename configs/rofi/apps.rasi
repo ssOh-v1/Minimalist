@@ -13,11 +13,11 @@ configuration {
 window {
     location: southwest;
     anchor: southwest;
-    x-offset: 12px;
+    x-offset: 0px;
     y-offset: -200px;
     width: 400px;
     border: 1px;
-    border-radius: 25px;         /* как скругление #workspaces в Waybar */
+    border-radius: 25px;
     background-color: #1e1e2e;
     padding: 16px;
 }
